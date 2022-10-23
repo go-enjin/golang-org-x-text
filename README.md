@@ -1,8 +1,23 @@
-# Go Text
+# Go Text (go-enjin fork)
 
-[![Go Reference](https://pkg.go.dev/badge/golang.org/x/text.svg)](https://pkg.go.dev/golang.org/x/text)
+[![Go Reference](https://pkg.go.dev/badge/github.com/go-enjin/golang-org-x-text.svg)](https://pkg.go.dev/github.com/go-enjin/golang-org-x-text)
 
 This repository holds supplementary Go libraries for text processing, many involving Unicode.
+
+## Go-Enjin Fork
+
+This repository has two main branches: `upstream` and `trunk`. All Go-Enjin
+changes that are divergent from `golang.org/x/text` are made in `trunk`. All
+changes on their way to upstream are in their own branches (based off of
+`upstream`).
+
+The purpose of this fork is to enable multilingual support within the overall
+Go-Enjin project and due to various reasons, this has proven to require
+specific changes to the upstream projet that may or may not ever propagate
+back.
+
+All changes made by the Go-Enjin team are licensed under the same terms as
+the upstream project.
 
 ## Semantic Versioning
 This repo uses Semantic versioning (http://semver.org/), so
