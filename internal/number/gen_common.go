@@ -10,7 +10,7 @@ package main
 import (
 	"unicode/utf8"
 
-	"golang.org/x/text/internal/language/compact"
+	"github.com/go-enjin/golang-org-x-text/internal/language/compact"
 )
 
 // A system identifies a CLDR numbering system.

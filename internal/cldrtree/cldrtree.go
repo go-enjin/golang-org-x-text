@@ -72,9 +72,9 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"golang.org/x/text/internal/gen"
-	"golang.org/x/text/language"
-	"golang.org/x/text/unicode/cldr"
+	"github.com/go-enjin/golang-org-x-text/internal/gen"
+	"github.com/go-enjin/golang-org-x-text/language"
+	"github.com/go-enjin/golang-org-x-text/unicode/cldr"
 )
 
 // TODO:

@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"golang.org/x/text/encoding"
-	"golang.org/x/text/encoding/charmap"
-	"golang.org/x/text/transform"
+	"github.com/go-enjin/golang-org-x-text/encoding"
+	"github.com/go-enjin/golang-org-x-text/encoding/charmap"
+	"github.com/go-enjin/golang-org-x-text/transform"
 )
 
 func TestEncodeInvalidUTF8(t *testing.T) {

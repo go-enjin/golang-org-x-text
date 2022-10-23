@@ -10,8 +10,8 @@ package precis
 import (
 	"strings"
 
-	"golang.org/x/text/runes"
-	"golang.org/x/text/secure/bidirule"
+	"github.com/go-enjin/golang-org-x-text/runes"
+	"github.com/go-enjin/golang-org-x-text/secure/bidirule"
 )
 
 var enforceTestCases = []struct {

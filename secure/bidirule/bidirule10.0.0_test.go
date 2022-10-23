@@ -8,8 +8,8 @@
 package bidirule
 
 import (
-	"golang.org/x/text/transform"
-	"golang.org/x/text/unicode/bidi"
+	"github.com/go-enjin/golang-org-x-text/transform"
+	"github.com/go-enjin/golang-org-x-text/unicode/bidi"
 )
 
 var testCases = [][]ruleTest{

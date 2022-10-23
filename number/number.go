@@ -13,7 +13,7 @@ package number
 //
 
 import (
-	"golang.org/x/text/internal/number"
+	"github.com/go-enjin/golang-org-x-text/internal/number"
 )
 
 const (

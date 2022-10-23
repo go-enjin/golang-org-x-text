@@ -16,14 +16,14 @@ import (
 	"sort"
 	"strings"
 
-	"golang.org/x/text/encoding"
-	"golang.org/x/text/encoding/charmap"
-	"golang.org/x/text/encoding/internal/identifier"
-	"golang.org/x/text/encoding/japanese"
-	"golang.org/x/text/encoding/korean"
-	"golang.org/x/text/encoding/simplifiedchinese"
-	"golang.org/x/text/encoding/traditionalchinese"
-	"golang.org/x/text/encoding/unicode"
+	"github.com/go-enjin/golang-org-x-text/encoding"
+	"github.com/go-enjin/golang-org-x-text/encoding/charmap"
+	"github.com/go-enjin/golang-org-x-text/encoding/internal/identifier"
+	"github.com/go-enjin/golang-org-x-text/encoding/japanese"
+	"github.com/go-enjin/golang-org-x-text/encoding/korean"
+	"github.com/go-enjin/golang-org-x-text/encoding/simplifiedchinese"
+	"github.com/go-enjin/golang-org-x-text/encoding/traditionalchinese"
+	"github.com/go-enjin/golang-org-x-text/encoding/unicode"
 )
 
 // TODO: remove the "Status... incomplete" in the package doc comment.

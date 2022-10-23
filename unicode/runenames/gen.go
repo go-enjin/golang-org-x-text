@@ -13,9 +13,9 @@ import (
 	"sort"
 	"strings"
 
-	"golang.org/x/text/internal/gen"
-	"golang.org/x/text/internal/gen/bitfield"
-	"golang.org/x/text/internal/ucd"
+	"github.com/go-enjin/golang-org-x-text/internal/gen"
+	"github.com/go-enjin/golang-org-x-text/internal/gen/bitfield"
+	"github.com/go-enjin/golang-org-x-text/internal/ucd"
 )
 
 var (

@@ -23,7 +23,7 @@ import (
 	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/ssa"
 
-	fmtparser "golang.org/x/text/internal/format"
+	fmtparser "github.com/go-enjin/golang-org-x-text/internal/format"
 )
 
 const debug = false
@@ -108,25 +108,25 @@ func (x *extracter) seedEndpoints() error {
 		for k := range p.Imports {
 			imports = imports + k + "\n"
 		}
-		if p2, ok := p.Imports["golang.org/x/text/message"]; ok {
+		if p2, ok := p.Imports["github.com/go-enjin/golang-org-x-text/message"]; ok {
 			pkg = p2
 			break
 		}
 	}
 	if pkg == nil {
-		return errors.New("pipeline: golang.org/x/text/message is not imported.\n" + imports)
+		return errors.New("pipeline: github.com/go-enjin/golang-org-x-text/message is not imported.\n" + imports)
 	}
 
 	var typ *types.Pointer
 	for _, typeAndVal := range pkg.TypesInfo.Types {
-		if typeAndVal.Type.String() == "golang.org/x/text/message.Printer" {
+		if typeAndVal.Type.String() == "github.com/go-enjin/golang-org-x-text/message.Printer" {
 			typ = types.NewPointer(typeAndVal.Type)
 			break
 		}
 	}
 
 	if typ == nil {
-		return errors.New("pipeline: golang.org/x/text/message.Printer was not found")
+		return errors.New("pipeline: github.com/go-enjin/golang-org-x-text/message.Printer was not found")
 	}
 
 	x.processGlobalVars()

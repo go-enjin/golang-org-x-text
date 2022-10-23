@@ -10,10 +10,10 @@ import (
 	"io"
 	"testing"
 
-	"golang.org/x/text/internal"
-	"golang.org/x/text/internal/format"
-	"golang.org/x/text/language"
-	"golang.org/x/text/message/catalog"
+	"github.com/go-enjin/golang-org-x-text/internal"
+	"github.com/go-enjin/golang-org-x-text/internal/format"
+	"github.com/go-enjin/golang-org-x-text/language"
+	"github.com/go-enjin/golang-org-x-text/message/catalog"
 )
 
 type formatFunc func(s fmt.State, v rune)

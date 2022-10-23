@@ -11,9 +11,9 @@ import (
 	"flag"
 	"log"
 
-	"golang.org/x/text/internal/gen"
-	"golang.org/x/text/internal/triegen"
-	"golang.org/x/text/internal/ucd"
+	"github.com/go-enjin/golang-org-x-text/internal/gen"
+	"github.com/go-enjin/golang-org-x-text/internal/triegen"
+	"github.com/go-enjin/golang-org-x-text/internal/ucd"
 )
 
 var outputFile = flag.String("out", "tables.go", "output file")

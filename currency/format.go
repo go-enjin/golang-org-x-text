@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"sort"
 
-	"golang.org/x/text/internal/format"
-	"golang.org/x/text/internal/language/compact"
-	"golang.org/x/text/internal/number"
+	"github.com/go-enjin/golang-org-x-text/internal/format"
+	"github.com/go-enjin/golang-org-x-text/internal/language/compact"
+	"github.com/go-enjin/golang-org-x-text/internal/number"
 
-	"golang.org/x/text/language"
+	"github.com/go-enjin/golang-org-x-text/language"
 )
 
 // Amount is an amount-currency unit pair.

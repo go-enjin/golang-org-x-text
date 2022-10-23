@@ -19,9 +19,9 @@ import (
 	"strconv"
 	"strings"
 
-	"golang.org/x/text/internal/gen"
-	"golang.org/x/text/internal/language"
-	"golang.org/x/text/unicode/cldr"
+	"github.com/go-enjin/golang-org-x-text/internal/gen"
+	"github.com/go-enjin/golang-org-x-text/internal/language"
+	"github.com/go-enjin/golang-org-x-text/unicode/cldr"
 )
 
 var (

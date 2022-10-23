@@ -8,7 +8,7 @@ import (
 	"testing"
 	"unicode"
 
-	"golang.org/x/text/encoding"
+	"github.com/go-enjin/golang-org-x-text/encoding"
 )
 
 func TestASCIIDecoder(t *testing.T) {

@@ -8,10 +8,10 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"golang.org/x/text/encoding"
-	"golang.org/x/text/encoding/internal"
-	"golang.org/x/text/encoding/internal/identifier"
-	"golang.org/x/text/transform"
+	"github.com/go-enjin/golang-org-x-text/encoding"
+	"github.com/go-enjin/golang-org-x-text/encoding/internal"
+	"github.com/go-enjin/golang-org-x-text/encoding/internal/identifier"
+	"github.com/go-enjin/golang-org-x-text/transform"
 )
 
 type asciiDecoder struct {

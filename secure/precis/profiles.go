@@ -7,9 +7,9 @@ package precis
 import (
 	"unicode"
 
-	"golang.org/x/text/runes"
-	"golang.org/x/text/transform"
-	"golang.org/x/text/unicode/norm"
+	"github.com/go-enjin/golang-org-x-text/runes"
+	"github.com/go-enjin/golang-org-x-text/transform"
+	"github.com/go-enjin/golang-org-x-text/unicode/norm"
 )
 
 var (
