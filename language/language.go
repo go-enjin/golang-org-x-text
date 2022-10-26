@@ -227,6 +227,17 @@ func (t Tag) String() string {
 	return t.tag().String()
 }
 
+// Compare returns true if the first tag is equivalent to one of the remaining
+// tags given
+func Compare(a Tag, others ...Tag) (equal bool) {
+	for _, b := range others {
+		if equal = a.lang() == b.lang() && a.script() == b.script() && a.region() == b.region(); equal {
+			return
+		}
+	}
+	return
+}
+
 // MarshalText implements encoding.TextMarshaler.
 func (t Tag) MarshalText() (text []byte, err error) {
 	return t.tag().MarshalText()
