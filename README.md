@@ -33,6 +33,8 @@ bump.
 A major new CLDR version is mapped to a minor version increase in x/text.
 Any other new CLDR version is mapped to a patch version increase in x/text.
 
+## CLDR Versioning
+
 It is important that the Unicode version used in `x/text` matches the one used
 by your Go compiler. The `x/text` repository supports multiple versions of
 Unicode and will match the version of Unicode to that of the Go compiler. At the
