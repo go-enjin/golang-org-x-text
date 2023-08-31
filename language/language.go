@@ -38,16 +38,6 @@ func (t *Tag) lang() language.Language { return t.tag().LangID }
 func (t *Tag) region() language.Region { return t.tag().RegionID }
 func (t *Tag) script() language.Script { return t.tag().ScriptID }
 
-func (t *Tag) MarshalBinary() (data []byte, err error) {
-	data, err = (*compact.Tag)(t).MarshalBinary()
-	return
-}
-
-func (t *Tag) UnmarshalBinary(data []byte) (err error) {
-	err = (*compact.Tag)(t).UnmarshalBinary(data)
-	return
-}
-
 // Make is a convenience wrapper for Parse that omits the error.
 // In case of an error, a sensible default is returned.
 func Make(s string) Tag {
@@ -235,17 +225,6 @@ func (c Confidence) String() string {
 // String returns the canonical string representation of the language tag.
 func (t Tag) String() string {
 	return t.tag().String()
-}
-
-// Compare returns true if the first tag is equivalent to one of the remaining
-// tags given
-func Compare(a Tag, others ...Tag) (equal bool) {
-	for _, b := range others {
-		if equal = a.lang() == b.lang() && a.script() == b.script() && a.region() == b.region(); equal {
-			return
-		}
-	}
-	return
 }
 
 // MarshalText implements encoding.TextMarshaler.

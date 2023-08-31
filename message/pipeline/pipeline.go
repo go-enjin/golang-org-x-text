@@ -11,6 +11,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"go/build"
+	"go/parser"
 	"io/ioutil"
 	"log"
 	"os"
@@ -20,13 +22,10 @@ import (
 	"text/template"
 	"unicode"
 
-	"golang.org/x/tools/go/packages"
-	"golang.org/x/tools/go/ssa"
-	"golang.org/x/tools/go/ssa/ssautil"
-
 	"github.com/go-enjin/golang-org-x-text/internal"
 	"github.com/go-enjin/golang-org-x-text/language"
 	"github.com/go-enjin/golang-org-x-text/runes"
+	"golang.org/x/tools/go/loader"
 )
 
 const (
@@ -91,7 +90,7 @@ type Config struct {
 	// file. If not specified it is relative to the current directory.
 	GenPackage string
 
-	// DeclareVar defines a variable to which to assing the generated Catalog.
+	// DeclareVar defines a variable to which to assign the generated Catalog.
 	DeclareVar string
 
 	// SetDefault determines whether to assign the generated Catalog to
@@ -126,6 +125,7 @@ type State struct {
 	Config Config
 
 	Package string
+	program *loader.Program
 
 	Extracted Messages `json:"messages"`
 
@@ -314,7 +314,7 @@ func (s *State) Merge() error {
 		ms := Messages{Language: tag}
 		for _, orig := range filtered {
 			m := *orig
-			// m.Key = "" //< go-enjin needs Key exposed to json outputs
+			m.Key = ""
 			m.Position = ""
 
 			for _, id := range m.ID {
@@ -403,23 +403,20 @@ func warnf(format string, args ...interface{}) {
 	log.Printf(format, args...)
 }
 
-func loadPackages(conf *packages.Config, args []string) (*ssa.Program, []*packages.Package, error) {
+func loadPackages(conf *loader.Config, args []string) (*loader.Program, error) {
 	if len(args) == 0 {
 		args = []string{"."}
 	}
 
-	conf.Mode = packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles |
-		packages.NeedImports |
-		packages.NeedTypes | packages.NeedTypesSizes |
-		packages.NeedSyntax | packages.NeedTypesInfo |
-		packages.NeedDeps
-	pkgs, err := packages.Load(conf, args...)
+	conf.Build = &build.Default
+	conf.ParserMode = parser.ParseComments
+
+	// Use the initial packages from the command line.
+	args, err := conf.FromArgs(args, false)
 	if err != nil {
-		packages.PrintErrors(pkgs)
-		return nil, nil, err
+		return nil, wrap(err, "loading packages failed")
 	}
 
-	prog, _ := ssautil.Packages(pkgs, 0)
-
-	return prog, pkgs, nil
+	// Load, parse and type-check the whole program.
+	return conf.Load()
 }

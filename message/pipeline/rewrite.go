@@ -15,7 +15,7 @@ import (
 	"os"
 	"strings"
 
-	"golang.org/x/tools/go/packages"
+	"golang.org/x/tools/go/loader"
 )
 
 const printerType = "github.com/go-enjin/golang-org-x-text/message.Printer"
@@ -25,21 +25,22 @@ const printerType = "github.com/go-enjin/golang-org-x-text/message.Printer"
 // If w is not nil the generated files are written to it, each files with a
 // "--- <filename>" header. Otherwise the files are overwritten.
 func Rewrite(w io.Writer, args ...string) error {
-	conf := &packages.Config{}
-	_, pkgs, err := loadPackages(conf, args)
+	conf := &loader.Config{
+		AllowErrors: true, // Allow unused instances of message.Printer.
+	}
+	prog, err := loadPackages(conf, args)
 	if err != nil {
 		return wrap(err, "")
 	}
 
-	for _, pkg := range pkgs {
-		for _, f := range pkg.Syntax {
+	for _, info := range prog.InitialPackages() {
+		for _, f := range info.Files {
 			// Associate comments with nodes.
 
 			// Pick up initialized Printers at the package level.
-			r := rewriter{pkg: pkg, conf: conf}
-
-			for _, n := range pkg.TypesInfo.InitOrder {
-				if t := r.pkg.TypesInfo.Types[n.Rhs].Type.String(); strings.HasSuffix(t, printerType) {
+			r := rewriter{info: info, conf: conf}
+			for _, n := range info.InitOrder {
+				if t := r.info.Types[n.Rhs].Type.String(); strings.HasSuffix(t, printerType) {
 					r.printerVar = n.Lhs[0].Name()
 				}
 			}
@@ -66,8 +67,8 @@ func Rewrite(w io.Writer, args ...string) error {
 }
 
 type rewriter struct {
-	pkg        *packages.Package
-	conf       *packages.Config
+	info       *loader.PackageInfo
+	conf       *loader.Config
 	printerVar string
 }
 
@@ -93,7 +94,7 @@ func (r *rewriter) Visit(n ast.Node) ast.Visitor {
 			}
 		}
 		for i, v := range stmt.Rhs {
-			if t := r.pkg.TypesInfo.Types[v].Type.String(); strings.HasSuffix(t, printerType) {
+			if t := r.info.Types[v].Type.String(); strings.HasSuffix(t, printerType) {
 				r.printerVar = r.print(stmt.Lhs[i])
 				return r
 			}
@@ -108,7 +109,7 @@ func (r *rewriter) Visit(n ast.Node) ast.Visitor {
 			}
 		}
 		for i, v := range spec.Values {
-			if t := r.pkg.TypesInfo.Types[v].Type.String(); strings.HasSuffix(t, printerType) {
+			if t := r.info.Types[v].Type.String(); strings.HasSuffix(t, printerType) {
 				r.printerVar = r.print(spec.Names[i])
 				return r
 			}
@@ -127,7 +128,7 @@ func (r *rewriter) Visit(n ast.Node) ast.Visitor {
 	if !ok {
 		return r
 	}
-	meth := r.pkg.TypesInfo.Selections[sel]
+	meth := r.info.Selections[sel]
 
 	source := r.print(sel.X)
 	fun := r.print(sel.Sel)
@@ -162,7 +163,7 @@ func (r *rewriter) Visit(n ast.Node) ast.Visitor {
 	}
 	hasConst := false
 	for _, a := range call.Args[argn:] {
-		if v := r.pkg.TypesInfo.Types[a].Value; v != nil && v.Kind() == constant.String {
+		if v := r.info.Types[a].Value; v != nil && v.Kind() == constant.String {
 			hasConst = true
 			break
 		}
@@ -175,7 +176,7 @@ func (r *rewriter) Visit(n ast.Node) ast.Visitor {
 	// We are done if there is only a single string that does not need to be
 	// escaped.
 	if len(call.Args) == 1 {
-		s, ok := constStr(r.pkg, call.Args[0])
+		s, ok := constStr(r.info, call.Args[0])
 		if ok && !strings.Contains(s, "%") && !rewriteType.newLine {
 			return r
 		}
@@ -189,7 +190,7 @@ func (r *rewriter) Visit(n ast.Node) ast.Visitor {
 	newArgs := append(call.Args[:argn:argn], expr)
 	newStr := []string{}
 	for i, a := range call.Args[argn:] {
-		if s, ok := constStr(r.pkg, a); ok {
+		if s, ok := constStr(r.info, a); ok {
 			newStr = append(newStr, strings.Replace(s, "%", "%%", -1))
 		} else {
 			newStr = append(newStr, "%v")
@@ -258,8 +259,8 @@ var rewriteFuncs = map[string]map[string]rewriteType{
 	},
 }
 
-func constStr(pkg *packages.Package, e ast.Expr) (s string, ok bool) {
-	v := pkg.TypesInfo.Types[e].Value
+func constStr(info *loader.PackageInfo, e ast.Expr) (s string, ok bool) {
+	v := info.Types[e].Value
 	if v == nil || v.Kind() != constant.String {
 		return "", false
 	}
