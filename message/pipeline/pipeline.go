@@ -314,7 +314,7 @@ func (s *State) Merge() error {
 		ms := Messages{Language: tag}
 		for _, orig := range filtered {
 			m := *orig
-			m.Key = ""
+			// m.Key = "" //< go-enjin needs Key exposed to json outputs
 			m.Position = ""
 
 			for _, id := range m.ID {
