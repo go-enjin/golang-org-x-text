@@ -13,6 +13,7 @@ import (
 	"go/format"
 	"go/token"
 	"go/types"
+	"os"
 	"path/filepath"
 	"strings"
 	"unicode"
@@ -114,7 +115,8 @@ func (x *extracter) seedEndpoints() error {
 		}
 	}
 	if pkg == nil {
-		return errors.New("pipeline: github.com/go-enjin/golang-org-x-text/message is not imported.\n" + imports)
+		fmt.Fprintf(os.Stderr, "gotext: no source translation strings found.\n")
+		return nil
 	}
 
 	var typ *types.Pointer
