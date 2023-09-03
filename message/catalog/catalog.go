@@ -263,6 +263,7 @@ type Builder struct {
 
 type options struct {
 	fallback language.Tag
+	catalogs []Catalog
 }
 
 // An Option configures Catalog behavior.
@@ -271,6 +272,11 @@ type Option func(*options)
 // Fallback specifies the default fallback language. The default is Und.
 func Fallback(tag language.Tag) Option {
 	return func(o *options) { o.fallback = tag }
+}
+
+// Include specifies additional catalogs to include
+func Include(others ...Catalog) Option {
+	return func(o *options) { o.catalogs = append(o.catalogs, others...) }
 }
 
 // TODO:
@@ -293,6 +299,12 @@ func NewBuilder(opts ...Option) *Builder {
 		o(&c.options)
 	}
 	return c
+}
+
+// Include specifies additional catalogs to include after NewBuilder
+func (c *Builder) Include(others ...Catalog) {
+	c.catalogs = append(c.catalogs, others...)
+	return
 }
 
 // SetString is shorthand for Set(tag, key, String(msg)).
