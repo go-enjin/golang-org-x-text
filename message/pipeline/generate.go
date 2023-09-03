@@ -138,11 +138,17 @@ func (s *State) generate() (*gen.CodeWriter, error) {
 	cw := gen.NewCodeWriter()
 
 	x := &struct {
-		Fallback  language.Tag
-		Languages []string
+		Fallback   language.Tag
+		Languages  []string
+		GoBuild    string
+		DeclareVar string
+		SetDefault bool
 	}{
-		Fallback:  s.Extracted.Language,
-		Languages: langVars,
+		Fallback:   s.Extracted.Language,
+		Languages:  langVars,
+		GoBuild:    s.Config.GoBuild,
+		DeclareVar: s.Config.DeclareVar,
+		SetDefault: s.Config.SetDefault,
 	}
 
 	if err := lookup.Execute(cw, x); err != nil {
@@ -289,11 +295,20 @@ func sortCases(cases []string) {
 var cmpNumeric = collate.New(language.Und, collate.Numeric).CompareString
 
 var lookup = template.Must(template.New("gen").Parse(`
+{{- if .GoBuild }}//go:build {{ .GoBuild }}
+{{ end }}
+
 import (
 	"github.com/go-enjin/golang-org-x-text/language"
+{{- if .SetDefault }}
 	"github.com/go-enjin/golang-org-x-text/message"
+{{- end }}
 	"github.com/go-enjin/golang-org-x-text/message/catalog"
 )
+
+{{ if not .SetDefault }}
+var {{ .DeclareVar }} catalog.Catalog
+{{ end }}
 
 type dictionary struct {
 	index []uint32
@@ -322,7 +337,11 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+{{- if .SetDefault }}
 	message.DefaultCatalog = cat
+{{- else }}
+	{{ .DeclareVar }} = cat
+{{- end }}
 }
 
 `))
