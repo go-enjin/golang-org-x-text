@@ -240,6 +240,9 @@ func (c *callData) Pos() token.Pos      { return c.call.Pos() }
 func (c *callData) Pkg() *types.Package { return c.call.Parent().Pkg.Pkg }
 
 func (x *extracter) handleFunc(f *ssa.Function, fd *callData) {
+	if _, present := x.callGraph.Nodes[f]; !present {
+		return
+	}
 	for _, e := range x.callGraph.Nodes[f].In {
 		if e.Pos() == 0 {
 			continue
