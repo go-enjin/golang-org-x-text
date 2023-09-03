@@ -24,9 +24,9 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"github.com/go-enjin/golang-org-x-text/language"
 	"github.com/go-enjin/golang-org-x-text/message/pipeline"
 
-	"github.com/go-enjin/golang-org-x-text/language"
 	"golang.org/x/tools/go/buildutil"
 )
 
@@ -41,6 +41,8 @@ var (
 
 	srcLang = flag.String("srclang", "en-US", "the source-code language")
 	dir     = flag.String("dir", "locales", "default subdirectory to store translation files")
+	declVar = flag.String("declare-var", "", "variable to declare when generating go sources")
+	goBuild = flag.String("go-build", "", "go:build constraint to include when generating go sources")
 )
 
 func config() (*pipeline.Config, error) {
@@ -54,6 +56,9 @@ func config() (*pipeline.Config, error) {
 		TranslationsPattern: `messages\.(.*)\.json$`,
 		GenFile:             *out,
 		Dir:                 *dir,
+		SetDefault:          *declVar == "",
+		DeclareVar:          *declVar,
+		GoBuild:             *goBuild,
 	}, nil
 }
 
@@ -172,7 +177,14 @@ var usageTemplate = `gotext is a tool for managing text in Go source code.
 
 Usage:
 
-	gotext command [arguments]
+	gotext [global options] command [arguments]
+
+The global options are:
+    -srclang=<code>            source code language used (default: en-US)
+    -declare-var=<name>        declare variable instead of overwriting the
+                               message.DefaultCatalog package global
+    -go-build=<constraint>     include a //go:build line with the specified
+                               constraint line conditions
 
 The commands are:
 {{range .}}{{if .Runnable}}
@@ -186,6 +198,11 @@ Additional help topics:
 
 Use "gotext help [topic]" for more information about that topic.
 
+IMPORTANT:
+
+This version of gotext is a fork for the Go-Enjin project. Unless you're
+building enjin things, this is probably not the version of gotext you want
+to use.
 `
 
 var helpTemplate = `{{if .Runnable}}usage: gotext {{.UsageLine}}
