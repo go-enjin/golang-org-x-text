@@ -4,7 +4,15 @@
 //
 // Usage:
 //
-//	gotext command [arguments]
+//	gotext [global options] command [arguments]
+//
+// The global options are:
+//
+//	-srclang=<code>            source code language used (default: en-US)
+//	-declare-var=<name>        declare variable instead of overwriting the
+//	                           message.DefaultCatalog package global
+//	-go-build=<constraint>     include a //go:build line with the specified
+//	                           constraint line conditions
 //
 // The commands are:
 //
@@ -18,6 +26,12 @@
 // Additional help topics:
 //
 // Use "gotext help [topic]" for more information about that topic.
+//
+// IMPORTANT:
+//
+// This version of gotext is a fork for the Go-Enjin project. Unless you're
+// building enjin things, this is probably not the version of gotext you want
+// to use.
 //
 // # Merge translations and generate catalog
 //
@@ -35,12 +49,14 @@
 //
 // Usage:
 //
-//	gotext rewrite <package>
+//	gotext rewrite [-w] <package>
 //
 // rewrite is typically done once for a project. It rewrites all usages of
 // fmt to use x/text's message package whenever a message.Printer is in scope.
 // It rewrites Print and Println calls with constant strings to the equivalent
 // using Printf to allow translators to reorder arguments.
+//
+// The -w flag specifies to write files in place.
 //
 // # Generates code to insert translated messages
 //
