@@ -1,3 +1,9 @@
+# DEPRECATED
+
+This fork has been migrated to a more formal, long-term home: https://github.com/go-corelibs/x-text
+
+This repository will be deleted at some point in the near future and is being archived for now.
+
 # Go Text (go-enjin fork)
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/go-enjin/golang-org-x-text.svg)](https://pkg.go.dev/github.com/go-enjin/golang-org-x-text)
